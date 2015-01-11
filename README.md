@@ -13,6 +13,6 @@ However, with Crystal being native code, and Crystal advancing as fast as it is,
 It should work with every version of Crystal from `0.1.0` to `0.5.7`
 
 ## Install
-  tar -xvf chrystal.tar.gz
-  tar -xvf chrystal-master
-  sudo ./scripts/setup.sh
+    tar -xvf chrystal.tar.gz
+    tar -xvf chrystal-master
+    sudo ./scripts/setup.sh

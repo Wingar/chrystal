@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+chrystal_sh="${0%/*}/../share/chrystal/chrystal.sh"
+source "$chrystal_sh"
+
+case "$1" in
+	-h|--help)
+		echo "usage: chrystal-exec CRYSTAL -- COMMAND [ARGS...]"
+		exit
+		;;
+	-V|--version)
+		echo "chrystal version $CHRYSTAL_VERSION"
+		exit
+		;;
+esac
+
+if (( $# == 0 )); then
+	echo "chrystal-exec: CRYSTAL and COMMAND required" >&2
+	exit 1
+fi
+
+argv=()
+
+for arg in "$@"; do
+	shift
+
+	if [[ "$arg" == "--" ]]; then break
+	else                          argv+=($arg)
+	fi
+done
+
+if (( $# == 0 )); then
+	echo "chrystal-exec: COMMAND required" >&2
+	exit 1
+fi
+
+shell_opts=("-l")
+[[ -t 0 ]] && shell_opts+=("-i")
+
+source_command="command -v chrystal >/dev/null || source $chrystal_sh"
+chrystal_command="chrystal $(printf "%q " "${argv[@]}")"
+sub_command="$(printf "%q " "$@")"
+command="$source_command; $chrystal_command && $sub_command"
+
+exec "$SHELL" "${shell_opts[@]}" -c "$command"
